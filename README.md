@@ -17,6 +17,7 @@ The workflow involves:
 The dataset is sourced from **Kaggle – Predict Calorie Expenditure**.
 
 Dataset Link: [Predict Calorie Expenditure](https://www.kaggle.com/datasets/adilshamim8/predict-calorie-expenditure)
+
 It typically includes the following features:
 
 * `User_ID` : Unique identifier for individuals
