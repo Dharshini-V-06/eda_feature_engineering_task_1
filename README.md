@@ -65,7 +65,7 @@ Below are the key visualizations from the dataset and the insights gained:
 3. **Calories vs Weight**
 
    * Scatter plot shows no strong linear relation, but calorie expenditure may slightly vary with weight.
-   * 
+     
 4. **Calories vs Height**
 
    * Scatter plot shows no strong linear relation, but calorie expenditure may slightly vary with Height.
