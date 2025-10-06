@@ -1,6 +1,6 @@
-# 📊 Calorie Expenditure Prediction
+# Calorie Expenditure Prediction
 
-## 📌 Project Overview
+## Project Overview
 
 This project focuses on predicting **calorie expenditure** using a dataset containing demographic and physiological information such as **Age, Sex, Height, Weight, Duration, Heart Rate, Body Temperature**, etc.
 
@@ -12,7 +12,7 @@ The workflow involves:
 
 ---
 
-## 📂 Dataset
+## Dataset
 
 The dataset is sourced from **Kaggle – Predict Calorie Expenditure**.
 
@@ -30,7 +30,7 @@ It typically includes the following features:
 * `Body_Temp` : Body temperature during activity
 * `Calories` : **Target variable** – calories burned
 
-## 📝 EDA Tasks
+##  EDA Tasks
 
 1. **Data Overview** – Inspect shape, column names, data types.
 2. **Missing Values Check** – Identify and handle missing values.
@@ -42,7 +42,7 @@ It typically includes the following features:
 
 ---
 
-## 🔨 Feature Engineering
+##  Feature Engineering
 
 * **Missing Value Imputation** – Fill missing values with mean/median/mode.
 * **Encoding Categorical Variables** – Convert `Gender` and age groups into numerical format.
@@ -53,7 +53,7 @@ It typically includes the following features:
   * `Duration x Heart_rate = duration*heart_rate`
 
 ---
-## 📊 Visual Insights
+##  Visual Insights
 
 Below are the key visualizations from the dataset and the insights gained:
 
@@ -84,7 +84,7 @@ Below are the key visualizations from the dataset and the insights gained:
 
 ---
 
-## 📈 Results
+## Results
 
 * EDA insights on calorie expenditure factors.
 * Preprocessed dataset ready for model training.
