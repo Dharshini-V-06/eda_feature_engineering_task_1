@@ -1,93 +1,141 @@
-# Calorie Expenditure Prediction
+# Calories Burn Prediction – EDA & Feature Engineering
 
-## Project Overview
+##  Overview
 
-This project focuses on predicting **calorie expenditure** using a dataset containing demographic and physiological information such as **Age, Sex, Height, Weight, Duration, Heart Rate, Body Temperature**, etc.
-
-The workflow involves:
-
-* Performing **Exploratory Data Analysis (EDA)** to understand the dataset.
-* Applying **Feature Engineering** to prepare data for machine learning models.
-* Building models to predict **Calories burned**.
+This project performs **Exploratory Data Analysis (EDA)** and **Feature Engineering** on a dataset containing information about individuals’ exercise sessions (Age, Height, Weight, Duration, Heart Rate, etc.) to understand how these variables relate to **Calories burned**.
+Both **train** and **test** datasets are explored and prepared for further model development.
 
 ---
 
-## Dataset
+## Dataset Description
 
-The dataset is sourced from **Kaggle – Predict Calorie Expenditure**.
+### **Train Dataset**
 
-Dataset Link: [Predict Calorie Expenditure](https://www.kaggle.com/datasets/adilshamim8/predict-calorie-expenditure)
+| Column       | Description                           |
+| :----------- | :------------------------------------ |
+| `id`         | Unique identifier                     |
+| `Sex`        | Gender (male/female)                  |
+| `Age`        | Age in years                          |
+| `Height`     | Height in centimeters                 |
+| `Weight`     | Weight in kilograms                   |
+| `Duration`   | Exercise duration (minutes)           |
+| `Heart_Rate` | Average heart rate during exercise    |
+| `Body_Temp`  | Body temperature during exercise (°C) |
+| `Calories`   | Target variable — calories burned     |
 
-It typically includes the following features:
+### **Test Dataset**
 
-* `User_ID` : Unique identifier for individuals
-* `Gender` : Male/Female
-* `Age` : Age of individual
-* `Height` : Height in cm
-* `Weight` : Weight in kg
-* `Duration` : Duration of exercise (minutes)
-* `Heart_Rate` : Average heart rate during activity
-* `Body_Temp` : Body temperature during activity
-* `Calories` : **Target variable** – calories burned
+Similar to the train dataset, but **without the `Calories`** column.
 
-##  EDA Tasks
+---
 
-1. **Data Overview** – Inspect shape, column names, data types.
-2. **Missing Values Check** – Identify and handle missing values.
-3. **Statistical Summary** – Mean, median, standard deviation.
-4. **Distribution Analysis** – Histograms for continuous variables.
-5. **Categorical Analysis** – Count plots for categorical variables.
-6. **Correlation Analysis** – Heatmap to check relationships.
-7. **Target Distribution** – Histogram of `Calories`.
+##  Libraries Used
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import PowerTransformer
+import sympy as sp
+```
+
+---
+
+##  Steps Performed
+
+### **Data Loading & Inspection**
+
+* Loaded both train and test CSV files using pandas.
+* Checked dataset structure using `.info()` and `.describe()`.
+* Verified there are **no missing values** and **no duplicate rows**.
+
+###  **Exploratory Data Analysis (EDA)**
+
+* Used `describe()` to understand data distribution and range.
+* Verified that `Calories` ranges from **1 to 314**.
+* Plotted distributions and boxplots for:
+
+  * `Calories`, `Duration`, `Heart_Rate`, `Body_Temp`
+  * Gender-based comparisons (`Sex` vs `Calories`)
+  * Scatter plots for relationships (`Duration` vs `Calories`, `Duration x Heart_Rate` vs `Calories`).
+
+---
+
+##  Visualizations
+
+###  Distributions
+
+* KDE and histogram plots for key numerical features.
+* Observed slight **right skewness** in `Calories` distribution.
+
+###  Boxplots & Scatterplots
+
+* **Boxplot:** Calories distribution across genders.
+* **Scatterplots:** Calories vs Duration (weighted by Weight).
+* Strong linear relationship between `Duration × Heart_Rate` and `Calories`.
+
+###  Correlation Heatmap
+
+* Highest correlation observed:
+
+  * `Duration (0.96)`
+  * `Heart_Rate (0.91)`
+  * `Body_Temp (0.83)`
+* Weak correlation for `Height` and `Weight`.
+
+---
+
+## Statistical Analysis
+
+| Metric                       |  Value |
+| :--------------------------- | -----: |
+| **Mean Calories**            |  88.28 |
+| **Median Calories**          |   77.0 |
+| **Mode Calories**            |    7.0 |
+| **% Above Average Calories** | 44.47% |
 
 ---
 
 ##  Feature Engineering
 
-* **Missing Value Imputation** – Fill missing values with mean/median/mode.
-* **Encoding Categorical Variables** – Convert `Gender` and age groups into numerical format.
-* **Feature Scaling** – Standardize numerical features for ML models.
-* **New Features**:
-
-  * `BMI = Weight / (Height/100)^2`
-  * `Duration x Heart_rate = duration*heart_rate`
-
----
-##  Visual Insights
-
-Below are the key visualizations from the dataset and the insights gained:
-
-1. **Distribution of Calories Burned**
-
-   * Histogram shows that most people burn calories within a moderate range, with fewer extreme high-burn cases (possible outliers).
-
-2. **Gender Distribution**
-
-   * Count plot confirms the dataset has a balanced number of male and female participants (or highlights imbalance if skewed).
-
-3. **Calories vs Weight**
-
-   * Scatter plot shows no strong linear relation, but calorie expenditure may slightly vary with weight.
-     
-4. **Calories vs Height**
-
-   * Scatter plot shows no strong linear relation, but calorie expenditure may slightly vary with Height.
-     
-5. **Boxplot of Calories by Gender**
-
-   * Males generally show slightly higher calorie expenditure than females, but there is significant overlap.
-
-6. **Pairplot of Key Features**
-
-   * Confirms multicollinearity among `Weight`, `BMI`, and `Calories`.
-   * Visualizes overall feature relationships.
+| Feature                 | Description                                                        |
+| :---------------------- | :----------------------------------------------------------------- |
+| `Sex_mapped`            | Encoded `male` → 0, `female` → 1                                   |
+| `Calories_sqrt`         | Square-root transformation (reduced skewness to ≈ 0)               |
+| `Body_Temp_transformed` | Power transformation using Yeo–Johnson                             |
+| `BMI`                   | Calculated as `Weight / (Height/100)^2`, rounded to 2 decimals     |
+| `Duration_x_HeartRate`  | Created interaction feature capturing intensity                    |
+| `BMI_Category`          | Categorized BMI → Underweight / Normal / Overweight / Obese        |
+| `Weight_bin`            | Quartile-based binning of weight → Low / Medium / High / Very High |
 
 ---
 
-## Results
+##  Key Insights
 
-* EDA insights on calorie expenditure factors.
-* Preprocessed dataset ready for model training.
-* Example ML models for calorie prediction.
+* **Calories** strongly depend on **Duration** and **Heart Rate**.
+* **Body Temperature** also shows a positive relationship with Calories.
+* **Weight and Height** have negligible correlation.
+* Most individuals fall under **Normal BMI (62%)**.
+* Dataset is clean, balanced, and ready for modeling.
 
 ---
+
+##  Transformations Summary
+
+| Feature     | Transformation                 | Result                  |
+| :---------- | :----------------------------- | :---------------------- |
+| `Calories`  | √ (Square Root)                | Normalized distribution |
+| `Body_Temp` | PowerTransformer (Yeo–Johnson) | Reduced skewness        |
+| `Sex`       | Label Encoding                 | Categorical → Numeric   |
+| `Weight`    | Quartile Binning               | Weight Groups           |
+
+---
+
+##  Visual Summary
+
+* Heatmaps, pie charts, bar charts, boxplots, and scatter plots used for visualization.
+* Weight, BMI, and gender analyzed with respect to calories burned.
+
+---
+
